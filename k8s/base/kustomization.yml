@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - product-backend-deployment.yml
+  - product-backend-service.yml
+  - product-backend-configmap.yml
+  - product-backend-secret.yml
+  - product-frontend-deployment.yml
+  - product-frontend-service.yml
+  - product-frontend-configmap.yml

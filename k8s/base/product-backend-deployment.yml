@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-backend-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: product-backend
+  template:
+    metadata:
+      labels:
+        component: product-backend
+    spec: 
+      containers:
+        - name: product-backend
+          image: magnomos/product-backend
+          ports: 
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: product-backend-config
+            - secretRef:
+                name: product-backend-secrets

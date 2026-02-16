@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "🚀 Démarrage de l'environnement local Minikube..."
+
+# 1. Démarrer Minikube (si pas déjà lancé)
+if minikube status | grep -q "Running"; then
+    echo "✅ Minikube est déjà en cours d'exécution."
+else
+    minikube start --driver=docker
+fi
+
+# 2. Activer l'addon Ingress
+echo "🌐 Activation de l'addon Ingress..."
+minikube addons enable ingress
+
+# 3. Appliquer la configuration Kubernetes (Kustomize)
+# Cela va créer : Postgres, le Backend, le Frontend, les ConfigMaps et les Secrets locaux
+echo "📦 Déploiement des manifests (Overlay: Local)..."
+kubectl apply -k k8s/overlays/local
+
+echo "⏳ Attente du démarrage des Pods..."
+kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
+kubectl wait --for=condition=ready pod -l app=product-backend --timeout=60s
+
+# 4. Afficher l'IP pour accéder à l'app
+IP=$(minikube ip)
+echo "-------------------------------------------------------"
+echo "🎉 Déploiement terminé !"
+echo "📍 Adresse IP de Minikube : $IP"
+echo "👉 Si tu as configuré un Ingress, ajoute cette ligne à ton fichier /etc/hosts :"
+echo "$IP  product-app.local"
+echo "-------------------------------------------------------"
+
+# 5. Lancer le tunnel (nécessaire sur macOS/Windows pour l'Ingress)
+echo "💡 Note: Le tunnel minikube va démarrer. Laisse ce terminal ouvert."
+minikube tunnel

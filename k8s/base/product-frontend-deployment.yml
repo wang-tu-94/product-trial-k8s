@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-frontend-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: product-frontend
+  template:
+    metadata:
+      labels:
+        component: product-frontend
+    spec: 
+      containers:
+        - name: product-frontend
+          image: magnomos/product-frontend
+          ports: 
+            - containerPort: 80
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: product-frontend-config
+                  key: APP_PROFILE

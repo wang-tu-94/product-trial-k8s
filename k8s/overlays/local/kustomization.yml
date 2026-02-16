@@ -1,0 +1,7 @@
+resources:
+  - ../../base
+  - postgres-local.yml 
+  - local-ingress.yml
+patches:
+  - path: product-backend-configmap-patch.yml
+  - path: product-backend-secret-patch.yml

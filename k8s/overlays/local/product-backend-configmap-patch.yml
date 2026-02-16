@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-backend-config
+data:
+  SPRING_PROFILES_ACTIVE: "integ"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "product_db"
+  JWT_EXPIRED_TIME: "86400" # 24 heures
