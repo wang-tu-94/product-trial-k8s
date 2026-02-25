@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-auth-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: ms-auth
+  template:
+    metadata:
+      labels:
+        component: ms-auth
+    spec: 
+      containers:
+        - name: ms-auth
+          image: magnomos/ms.auth
+          ports: 
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: ms-auth-config
+            - secretRef:
+                name: ms-auth-secrets

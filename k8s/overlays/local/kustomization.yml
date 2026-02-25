@@ -9,3 +9,5 @@ patches:
   - path: product-backend-secret-patch.yml
   - path: log-ingestor-configmap-patch.yml
   - path: log-ingestor-secret-patch.yml
+  - path: ms-auth-configmap-patch.yml
+  - path: ms-auth-secret-patch.yml

@@ -13,6 +13,12 @@ fi
 echo "🌐 Activation de l'addon Ingress..."
 minikube addons enable ingress
 
+echo "⏳ Attente du démarrage du contrôleur Ingress..."
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+
 # 3. Appliquer la configuration Kubernetes (Kustomize)
 # Cela va créer : Postgres, le Backend, le Frontend, les ConfigMaps et les Secrets locaux
 echo "📦 Déploiement des manifests (Overlay: Local)..."
@@ -23,6 +29,7 @@ kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
 kubectl wait --for=condition=ready pod -l app=kafka --timeout=120s
 kubectl wait --for=condition=ready pod -l component=product-backend --timeout=60s
 kubectl wait --for=condition=ready pod -l component=log-ingestor --timeout=60s
+kubectl wait --for=condition=ready pod -l component=ms-auth --timeout=60s
 
 # 4. Afficher l'IP pour accéder à l'app
 IP=$(minikube ip)
