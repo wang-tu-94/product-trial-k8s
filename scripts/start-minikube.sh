@@ -6,7 +6,7 @@ echo "🚀 Démarrage de l'environnement local Minikube..."
 if minikube status | grep -q "Running"; then
     echo "✅ Minikube est déjà en cours d'exécution."
 else
-    minikube start --driver=docker
+    minikube start --driver=docker --memory=4096 --cpus=4
 fi
 
 # 2. Activer l'addon Ingress
@@ -20,7 +20,9 @@ kubectl apply -k k8s/overlays/local
 
 echo "⏳ Attente du démarrage des Pods..."
 kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
-kubectl wait --for=condition=ready pod -l app=product-backend --timeout=60s
+kubectl wait --for=condition=ready pod -l app=kafka --timeout=120s
+kubectl wait --for=condition=ready pod -l component=product-backend --timeout=60s
+kubectl wait --for=condition=ready pod -l component=log-ingestor --timeout=60s
 
 # 4. Afficher l'IP pour accéder à l'app
 IP=$(minikube ip)

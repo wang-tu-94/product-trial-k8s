@@ -2,6 +2,10 @@ resources:
   - ../../base
   - postgres-local.yml 
   - local-ingress.yml
+  - kafka-local.yml
+  - kafka-ui-local.yml
 patches:
   - path: product-backend-configmap-patch.yml
   - path: product-backend-secret-patch.yml
+  - path: log-ingestor-configmap-patch.yml
+  - path: log-ingestor-secret-patch.yml

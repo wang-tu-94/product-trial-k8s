@@ -3,3 +3,5 @@ resources:
 patches:
   - path: product-backend-config-patch.yml
   - path: product-backend-secret-patch.yml
+  - path: log-ingestor-config-patch.yml
+  - path: log-ingestor-secret-patch.yml

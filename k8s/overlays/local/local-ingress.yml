@@ -4,14 +4,15 @@ metadata:
   name: ingress-service
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    # On ne réécrit rien pour que le Backend reçoive bien le chemin complet /api/v1/...
 spec:
   ingressClassName: nginx
   rules:
+    # ---------------------------------------------
+    # 1. Ton application principale (Front + Back)
+    # ---------------------------------------------
     - host: product-app.local
       http:
         paths:
-          # 1. Le trafic API va vers le Backend
           - path: /api/(.*)
             pathType: ImplementationSpecific
             backend:
@@ -19,12 +20,24 @@ spec:
                 name: product-backend-service
                 port:
                   number: 8080
-
-          # 2. Tout le reste va vers le Frontend
           - path: /?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
                 name: product-frontend-service
+                port:
+                  number: 80
+
+    # ---------------------------------------------
+    # 2. La nouvelle interface Kafka UI
+    # ---------------------------------------------
+    - host: kafka.product-app.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-ui-service
                 port:
                   number: 80

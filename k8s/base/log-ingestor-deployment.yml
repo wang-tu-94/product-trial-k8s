@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-ingestor-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: log-ingestor
+  template:
+    metadata:
+      labels:
+        component: log-ingestor
+    spec: 
+      containers:
+        - name: log-ingestor
+          image: magnomos/log-ingestor
+          ports: 
+            - containerPort: 8081
+            - containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: log-ingestor-config
+            - secretRef:
+                name: log-ingestor-secrets

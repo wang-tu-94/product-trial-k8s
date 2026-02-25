@@ -9,3 +9,7 @@ resources:
   - product-frontend-deployment.yml
   - product-frontend-service.yml
   - product-frontend-configmap.yml
+  - log-ingestor-deployment.yml
+  - log-ingestor-service.yml
+  - log-ingestor-configmap.yml
+  - log-ingestor-secret.yml

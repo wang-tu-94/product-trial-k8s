@@ -1,0 +1,73 @@
+---
+# 1. Le Service (Pour que ton Spring Boot puisse parler à Kafka)
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-local
+  labels:
+    app: kafka
+spec:
+  ports:
+    - name: tcp-kafka
+      port: 9092
+      targetPort: 9092
+  selector:
+    app: kafka
+
+---
+# 2. Le Déploiement (Le serveur Kafka en lui-même)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-local
+  labels:
+    app: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: apache/kafka:latest
+          ports:
+            - containerPort: 9092
+            - containerPort: 9093
+          env:
+            # --- CONFIGURATION KRAFT (Sans Zookeeper) ---
+            - name: KAFKA_NODE_ID
+              value: "1"
+            - name: KAFKA_PROCESS_ROLES
+              value: "broker,controller"
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: "1@localhost:9093"
+            - name: KAFKA_CONTROLLER_LISTENER_NAMES
+              value: "CONTROLLER"
+            
+            # --- CONFIGURATION RÉSEAU ---
+            - name: KAFKA_LISTENERS
+              value: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+            # C'EST LA LIGNE LA PLUS IMPORTANTE : On annonce l'adresse du Service K8s
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://kafka-local.default.svc.cluster.local:9092"
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+            
+            # --- ID DU CLUSTER (Requis par l'image officielle en KRaft) ---
+            - name: CLUSTER_ID
+              value: "MkU3OEVBNTcwNTJENDM2Qk" # Chaîne aléatoire en Base64
+
+            # --- OPTIMISATIONS POUR DEV LOCAL ---
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+              value: "1"
+            - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
+              value: "0"
