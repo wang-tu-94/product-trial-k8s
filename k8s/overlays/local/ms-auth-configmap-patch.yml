@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: ms-auth-config
 data:
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
   DB_HOST: "postgres-service"
   DB_PORT: "5432"
   DB_NAME: "ms_auth"
