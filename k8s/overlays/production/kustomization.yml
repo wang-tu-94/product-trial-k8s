@@ -7,3 +7,4 @@ patches:
   - path: log-ingestor-secret-patch.yml
   - path: ms-auth-config-patch.yml
   - path: ms-auth-secret-patch.yml
+  - path: api-gateway-secret-patch.yml

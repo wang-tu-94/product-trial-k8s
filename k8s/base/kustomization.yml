@@ -17,3 +17,6 @@ resources:
   - ms-auth-service.yml
   - ms-auth-configmap.yml
   - ms-auth-secret.yml
+  - api-gateway-deployment.yml
+  - api-gateway-service.yml
+  - api-gateway-secret.yml
