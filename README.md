@@ -1,76 +1,134 @@
-# 🚀 Product Trial K8s
+# ☸️ Product Trial - Kubernetes Infrastructure
 
-Ce dépôt contient les manifestes nécessaires pour déployer l'application **Product Trial** sur un cluster **Kubernetes**. 
+<div align="center">
+  <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
+  <img src="https://img.shields.io/badge/Kustomize-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kustomize" />
+  <img src="https://img.shields.io/badge/Minikube-326CE5?style=for-the-badge&logo=minikube&logoColor=white" alt="Minikube" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+</div>
+
+<br />
+
+Ce dépôt centralise toute la configuration d'infrastructure de l'écosystème **Product Trial**. Il utilise les manifestes Kubernetes et **Kustomize** pour orchestrer le déploiement de l'ensemble des microservices, des bases de données et des brokers de messages, en séparant proprement les environnements (Local vs Production).
 
 ## 📋 Table des matières
+- [Architecture Déployée](#-architecture-déployée)
+- [Structure du Projet (Kustomize)](#-structure-du-projet-kustomize)
 - [Prérequis](#-prérequis)
-- [Architecture](#-architecture)
-- [Installation et Déploiement](#-installation-et-déploiement)
-- [Commandes utiles](#-commandes-utiles)
+- [Déploiement Local](#-déploiement-local)
+- [Commandes Utiles](#-commandes-utiles)
+- [Nettoyage](#-nettoyage)
+
+---
+
+## 🏗 Architecture Déployée
+
+Le cluster Kubernetes héberge les composants suivants :
+
+**Microservices Applicatifs :**
+- `product-frontend` : L'interface utilisateur Web (Angular/Nginx).
+- `api-gateway` : Le point d'entrée unique et filtre de sécurité (Spring Cloud Gateway).
+- `ms-auth` : Microservice de gestion des identités et tokens JWT.
+- `product-backend` : API principale gérant le catalogue et les paniers.
+- `log-ingestor` : Service gRPC collectant les logs transverses.
+
+**Infrastructure (Overlay Local) :**
+- `postgres` : Base de données relationnelle pour le backend et l'auth.
+- `kafka` & `kafka-ui` : Broker de messages pour le traitement asynchrone des logs.
+- `ingress-nginx` : Contrôleur de routage pour exposer la Gateway et le Frontend.
+
+---
+
+## 📂 Structure du Projet (Kustomize)
+
+Le projet suit la structure standard de Kustomize pour une configuration "DRY" (Don't Repeat Yourself) :
+
+```text
+k8s/
+├── base/                   # Ressources communes à tous les environnements
+│   ├── api-gateway-* # Déploiements, Services, ConfigMaps, Secrets
+│   ├── ms-auth-* │   ├── product-backend-* │   ├── product-frontend-* │   └── log-ingestor-* └── overlays/
+    ├── local/              # Surcharge pour l'environnement de Dev (Minikube)
+    │   ├── kafka-local.yml
+    │   ├── postgres-local.yml
+    │   └── *-patch.yml     # Patches pour les variables d'environnement locales
+    └── production/         # Surcharge pour l'environnement de Prod (Cloud)
+        └── *-patch.yml     # Patches pour les ressources, replicas et secrets de prod
+```
 
 ---
 
 ## 🛠 Prérequis
 
-Avant de lancer le déploiement, assurez-vous de disposer des outils suivants :
-- **Docker** installé sur votre machine.
-- **Kubectl** configuré pour interagir avec votre cluster.
-- Un cluster Kubernetes fonctionnel (ex: **Minikube**, **Kind**, ou un cluster distant).
+Pour déployer l'infrastructure localement, vous devez installer :
+- **Docker**
+- **Minikube** (ou Kind)
+- **kubectl** (avec le support de Kustomize intégré, version >= 1.14)
 
 ---
 
-## 🏗 Architecture
+## 🚀 Déploiement Local
 
-Le projet est divisé en plusieurs composants orchestrés par Kubernetes :
-- **Frontend** : Interface utilisateur (Deployment + Service).
-- **Backend API** : Logique métier et endpoints (Deployment + Service).
-- **Base de données** : Persistance des données (Volume persistant + Deployment).
-
----
-
-## 🚀 Installation et Déploiement
-
-### 1. Cloner le dépôt
+### 1. Cloner le projet
 ```bash
 git clone [https://github.com/wang-tu-94/product-trial-k8s.git](https://github.com/wang-tu-94/product-trial-k8s.git)
 cd product-trial-k8s
 ```
 
-### 2. Déployer les ressources Kubernetes
-Appliquez l'ensemble des manifestes présents dans le dossier `k8s/` :
+### 2. Démarrer Minikube
+Un script utilitaire est fourni pour initialiser Minikube avec les bons addons (notamment Ingress) :
 ```bash
-kubectl apply -f k8s/
+sh scripts/start-minikube.sh
 ```
 
-### 3. Vérifier le déploiement
-Assurez-vous que tous les pods sont opérationnels (statut `Running`) :
+### 3. Appliquer la configuration Kustomize (Environnement Local)
+Utilisez l'option `-k` (Kustomize) au lieu de `-f` pour appliquer l'overlay local qui inclut automatiquement les bases de données et Kafka :
 ```bash
-kubectl get pods
+kubectl apply -k k8s/overlays/local
 ```
 
-Vérifiez également que les services sont bien exposés :
+### 4. Configuration de l'accès (Hosts)
+Afin que les règles d'Ingress fonctionnent (`product-app.local` par exemple), ajoutez l'IP de votre cluster Minikube à votre fichier `/etc/hosts` :
 ```bash
-kubectl get svc
-```
+# Obtenir l'IP de Minikube
+minikube ip
 
-### 4. Accéder à l'application (si utilisation locale)
-Si vous utilisez Minikube, vous pouvez exposer le service frontend avec cette commande :
-```bash
-minikube service <nom-du-service-frontend>
+# Ajouter au fichier hosts (sudo requis)
+# Exemple : 192.168.49.2 product-app.local api.product-app.local
 ```
 
 ---
 
-## 🔍 Commandes utiles
+## 🔍 Commandes Utiles
 
-**Voir les logs d'un composant (ex: backend) :**
+**Vérifier l'état de tous les pods :**
 ```bash
-kubectl logs -f deployment/<nom-du-deployment-backend>
+kubectl get pods -w
 ```
 
-**Nettoyer et supprimer toutes les ressources créées :**
+**Voir les logs d'un service spécifique (ex: API Gateway) :**
 ```bash
-kubectl delete -f k8s/
+kubectl logs -f deployment/api-gateway-deployment
+```
+
+**Accéder à Kafka UI (si déployé) :**
+```bash
+kubectl port-forward svc/kafka-ui-service 9000:8080
+# Accessible sur http://localhost:9000
+```
+
+---
+
+## 🧹 Nettoyage
+
+Pour détruire proprement toutes les ressources créées dans l'environnement local :
+```bash
+kubectl delete -k k8s/overlays/local
+```
+
+Pour arrêter le cluster local :
+```bash
+minikube stop
 ```
 
 ---
