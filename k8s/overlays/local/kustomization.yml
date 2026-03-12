@@ -4,6 +4,7 @@ resources:
   - local-ingress.yml
   - kafka-local.yml
   - kafka-ui-local.yml
+  - mongodb-local.yml
 patches:
   - path: product-backend-configmap-patch.yml
   - path: product-backend-secret-patch.yml
@@ -12,3 +13,5 @@ patches:
   - path: ms-auth-configmap-patch.yml
   - path: ms-auth-secret-patch.yml
   - path: api-gateway-secret-patch.yml
+  - path: ms-cms-configmap-patch.yml
+  - path: ms-cms-secret-patch.yml

@@ -26,11 +26,13 @@ kubectl apply -k k8s/overlays/local
 
 echo "⏳ Attente du démarrage des Pods..."
 kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
+kubectl wait --for=condition=ready pod -l app=mongodb --timeout=60s
 kubectl wait --for=condition=ready pod -l app=kafka --timeout=120s
 kubectl wait --for=condition=ready pod -l component=api-gateway --timeout=60s
 kubectl wait --for=condition=ready pod -l component=product-backend --timeout=60s
 kubectl wait --for=condition=ready pod -l component=log-ingestor --timeout=60s
 kubectl wait --for=condition=ready pod -l component=ms-auth --timeout=60s
+kubectl wait --for=condition=ready pod -l component=ms-cms --timeout=60s
 
 # 4. Afficher l'IP pour accéder à l'app
 IP=$(minikube ip)

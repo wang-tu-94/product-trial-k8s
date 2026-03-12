@@ -8,3 +8,5 @@ patches:
   - path: ms-auth-config-patch.yml
   - path: ms-auth-secret-patch.yml
   - path: api-gateway-secret-patch.yml
+  - path: ms-cms-config-patch.yml
+  - path: ms-cms-secret-patch.yml

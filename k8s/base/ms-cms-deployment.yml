@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-cms-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: ms-cms
+  template:
+    metadata:
+      labels:
+        component: ms-cms
+    spec: 
+      containers:
+        - name: ms-cms
+          image: magnomos/ms.cms
+          ports: 
+            - containerPort: 8086
+          envFrom:
+            - configMapRef:
+                name: ms-cms-config
+            - secretRef:
+                name: ms-cms-secrets

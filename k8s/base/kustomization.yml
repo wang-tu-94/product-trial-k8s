@@ -20,3 +20,7 @@ resources:
   - api-gateway-deployment.yml
   - api-gateway-service.yml
   - api-gateway-secret.yml
+  - ms-cms-deployment.yml
+  - ms-cms-service.yml
+  - ms-cms-configmap.yml
+  - ms-cms-secret.yml
