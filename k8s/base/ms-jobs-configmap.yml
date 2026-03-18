@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-jobs-config
+data:
+  DB_PORT: "5432"
+  DB_NAME: "ms-jobs"
+  JWT_EXPIRED_TIME: "3600"
