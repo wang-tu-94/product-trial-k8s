@@ -26,10 +26,10 @@ Ce dépôt centralise toute la configuration d'infrastructure de l'écosystème 
 Le cluster Kubernetes héberge les composants suivants :
 
 **Microservices Applicatifs :**
-- `product-frontend` : L'interface utilisateur Web (Angular/Nginx).
+- `app-front-angular` : L'interface utilisateur Web (Angular/Nginx).
 - `api-gateway` : Le point d'entrée unique et filtre de sécurité (Spring Cloud Gateway).
 - `ms-auth` : Microservice de gestion des identités et tokens JWT.
-- `product-backend` : API principale gérant le catalogue et les paniers.
+- `ms-products` : API principale gérant le catalogue et les paniers.
 - `log-ingestor` : Service gRPC collectant les logs transverses.
 
 **Infrastructure (Overlay Local) :**
@@ -47,7 +47,7 @@ Le projet suit la structure standard de Kustomize pour une configuration "DRY" (
 k8s/
 ├── base/                   # Ressources communes à tous les environnements
 │   ├── api-gateway-* # Déploiements, Services, ConfigMaps, Secrets
-│   ├── ms-auth-* │   ├── product-backend-* │   ├── product-frontend-* │   └── log-ingestor-* └── overlays/
+│   ├── ms-auth-* │   ├── ms-products-* │   ├── app-front-angular-* │   └── log-ingestor-* └── overlays/
     ├── local/              # Surcharge pour l'environnement de Dev (Minikube)
     │   ├── kafka-local.yml
     │   ├── postgres-local.yml
@@ -88,13 +88,13 @@ kubectl apply -k k8s/overlays/local
 ```
 
 ### 4. Configuration de l'accès (Hosts)
-Afin que les règles d'Ingress fonctionnent (`product-app.local` par exemple), ajoutez l'IP de votre cluster Minikube à votre fichier `/etc/hosts` :
+Afin que les règles d'Ingress fonctionnent (`my-project-app.local` par exemple), ajoutez l'IP de votre cluster Minikube à votre fichier `/etc/hosts` :
 ```bash
 # Obtenir l'IP de Minikube
 minikube ip
 
 # Ajouter au fichier hosts (sudo requis)
-# Exemple : 192.168.49.2 product-app.local api.product-app.local
+# Exemple : 192.168.49.2 my-project-app.local api.my-project-app.local
 ```
 
 ---

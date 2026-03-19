@@ -6,8 +6,8 @@ resources:
   - kafka-ui-local.yml
   - mongodb-local.yml
 patches:
-  - path: product-backend-configmap-patch.yml
-  - path: product-backend-secret-patch.yml
+  - path: ms-products-configmap-patch.yml
+  - path: ms-products-secret-patch.yml
   - path: log-ingestor-configmap-patch.yml
   - path: log-ingestor-secret-patch.yml
   - path: ms-auth-configmap-patch.yml

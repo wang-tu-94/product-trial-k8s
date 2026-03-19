@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: product-app.local
+    - host: my-project-app.local
       http:
         paths:
           # 1. Le trafic API va vers le Backend
@@ -25,6 +25,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: product-frontend-service
+                name: app-front-angular-service
                 port:
                   number: 80

@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: product-backend-config
+  name: ms-products-config
 data:
   # L'URL fournie par ton service Cloud (RDS, Cloud SQL, etc.)
   DB_HOST: "host"
   DB_PORT: "5432"
-  DB_NAME: "product_db"
+  DB_NAME: "ms_products"
   JWT_EXPIRED_TIME: "3600"
   LOGS_SERVER_HOST: "log-ingestor-service:50051"
 

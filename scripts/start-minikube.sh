@@ -29,7 +29,7 @@ kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
 kubectl wait --for=condition=ready pod -l app=mongodb --timeout=60s
 kubectl wait --for=condition=ready pod -l app=kafka --timeout=120s
 kubectl wait --for=condition=ready pod -l component=api-gateway --timeout=60s
-kubectl wait --for=condition=ready pod -l component=product-backend --timeout=60s
+kubectl wait --for=condition=ready pod -l component=ms-products --timeout=60s
 kubectl wait --for=condition=ready pod -l component=log-ingestor --timeout=60s
 kubectl wait --for=condition=ready pod -l component=ms-auth --timeout=60s
 kubectl wait --for=condition=ready pod -l component=ms-cms --timeout=60s
@@ -40,7 +40,7 @@ echo "-------------------------------------------------------"
 echo "🎉 Déploiement terminé !"
 echo "📍 Adresse IP de Minikube : $IP"
 echo "👉 Si tu as configuré un Ingress, ajoute cette ligne à ton fichier /etc/hosts :"
-echo "$IP  product-app.local"
+echo "$IP  my-project-app.local"
 echo "-------------------------------------------------------"
 
 # 5. Lancer le tunnel (nécessaire sur macOS/Windows pour l'Ingress)

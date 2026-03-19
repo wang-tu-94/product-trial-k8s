@@ -1,8 +1,8 @@
 resources:
   - ../../base
 patches:
-  - path: product-backend-config-patch.yml
-  - path: product-backend-secret-patch.yml
+  - path: ms-products-config-patch.yml
+  - path: ms-products-secret-patch.yml
   - path: log-ingestor-config-patch.yml
   - path: log-ingestor-secret-patch.yml
   - path: ms-auth-config-patch.yml

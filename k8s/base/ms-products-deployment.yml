@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-backend-deployment
+  name: ms-products-deployment
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      component: product-backend
+      component: ms-products
   template:
     metadata:
       labels:
-        component: product-backend
+        component: ms-products
     spec: 
       containers:
-        - name: product-backend
-          image: magnomos/product-backend
+        - name: ms-products
+          image: magnomos/ms.products
           ports: 
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: product-backend-config
+                name: ms-products-config
             - secretRef:
-                name: product-backend-secrets
+                name: ms-products-secrets

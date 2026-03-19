@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-frontend-deployment
+  name: app-front-angular-deployment
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      component: product-frontend
+      component: app-front-angular
   template:
     metadata:
       labels:
-        component: product-frontend
+        component: app-front-angular
     spec: 
       containers:
-        - name: product-frontend
-          image: magnomos/product-frontend
+        - name: app-front-angular
+          image: magnomos/app-front-angular
           ports: 
             - containerPort: 80
           env:
             - name: NODE_ENV
               valueFrom:
                 configMapKeyRef:
-                  name: product-frontend-config
+                  name: app-front-angular-config
                   key: APP_PROFILE

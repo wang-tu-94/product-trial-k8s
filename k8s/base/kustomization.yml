@@ -2,13 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - product-backend-deployment.yml
-  - product-backend-service.yml
-  - product-backend-configmap.yml
-  - product-backend-secret.yml
-  - product-frontend-deployment.yml
-  - product-frontend-service.yml
-  - product-frontend-configmap.yml
+  - ms-products-deployment.yml
+  - ms-products-service.yml
+  - ms-products-configmap.yml
+  - ms-products-secret.yml
+  - app-front-angular-deployment.yml
+  - app-front-angular-service.yml
+  - app-front-angular-configmap.yml
   - log-ingestor-deployment.yml
   - log-ingestor-service.yml
   - log-ingestor-configmap.yml
@@ -24,3 +24,7 @@ resources:
   - ms-cms-service.yml
   - ms-cms-configmap.yml
   - ms-cms-secret.yml
+  - ms-jobs-deployment.yml
+  - ms-jobs-service.yml
+  - ms-jobs-configmap.yml
+  - ms-jobs-secret.yml

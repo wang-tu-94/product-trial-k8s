@@ -9,6 +9,7 @@ data:
     # Ce script est exécuté automatiquement par l'image Postgres au premier démarrage
     psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
         CREATE DATABASE "ms_auth";
+        CREATE DATABASE "ms_jobs";
     EOSQL
 ---
 apiVersion: apps/v1
@@ -32,16 +33,16 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: "product_db" # La base principale
+              value: "ms_products" # La base principale
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: product-backend-secrets
+                  name: ms-products-secrets
                   key: DB_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: product-backend-secrets
+                  name: ms-products-secrets
                   key: DB_PASSWORD
           # On monte le ConfigMap comme un dossier dans le conteneur
           volumeMounts:

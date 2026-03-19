@@ -10,7 +10,7 @@ spec:
     # ---------------------------------------------
     # 1. Ton application principale (Front + Back)
     # ---------------------------------------------
-    - host: product-app.local
+    - host: my-project-app.local
       http:
         paths:
           - path: /api/(.*)
@@ -24,14 +24,14 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: product-frontend-service
+                name: app-front-angular-service
                 port:
                   number: 80
 
     # ---------------------------------------------
     # 2. La nouvelle interface Kafka UI
     # ---------------------------------------------
-    - host: kafka.product-app.local
+    - host: kafka.my-project-app.local
       http:
         paths:
           - path: /

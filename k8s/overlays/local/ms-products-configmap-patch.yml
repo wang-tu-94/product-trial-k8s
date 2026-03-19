@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: product-backend-config
+  name: ms-products-config
 data:
   SPRING_PROFILES_ACTIVE: "integ"
   DB_HOST: "postgres-service"
   DB_PORT: "5432"
-  DB_NAME: "product_db"
+  DB_NAME: "ms_products"
   JWT_EXPIRED_TIME: "86400" # 24 heures
   LOGS_SERVER_HOST: "log-ingestor-service:50051"
