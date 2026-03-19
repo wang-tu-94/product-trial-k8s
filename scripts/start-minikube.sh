@@ -24,15 +24,8 @@ kubectl wait --namespace ingress-nginx \
 echo "📦 Déploiement des manifests (Overlay: Local)..."
 kubectl apply -k k8s/overlays/local
 
-echo "⏳ Attente du démarrage des Pods..."
-kubectl wait --for=condition=ready pod -l app=postgres --timeout=60s
-kubectl wait --for=condition=ready pod -l app=mongodb --timeout=60s
-kubectl wait --for=condition=ready pod -l app=kafka --timeout=120s
-kubectl wait --for=condition=ready pod -l component=api-gateway --timeout=60s
-kubectl wait --for=condition=ready pod -l component=ms-products --timeout=60s
-kubectl wait --for=condition=ready pod -l component=log-ingestor --timeout=60s
-kubectl wait --for=condition=ready pod -l component=ms-auth --timeout=60s
-kubectl wait --for=condition=ready pod -l component=ms-cms --timeout=60s
+echo "⏳ Attente du démarrage de tous les déploiements en parallèle..."
+kubectl wait --for=condition=available deployment --all --timeout=300s
 
 # 4. Afficher l'IP pour accéder à l'app
 IP=$(minikube ip)

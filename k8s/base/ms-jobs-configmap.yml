@@ -4,5 +4,5 @@ metadata:
   name: ms-jobs-config
 data:
   DB_PORT: "5432"
-  DB_NAME: "ms-jobs"
+  DB_NAME: "ms_jobs"
   JWT_EXPIRED_TIME: "3600"

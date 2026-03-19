@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-jobs-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: ms-jobs
+  template:
+    metadata:
+      labels:
+        component: ms-jobs
+    spec: 
+      containers:
+        - name: ms-jobs
+          image: magnomos/ms.jobs
+          ports: 
+            - containerPort: 8087
+          envFrom:
+            - configMapRef:
+                name: ms-jobs-config
+            - secretRef:
+                name: ms-jobs-secrets

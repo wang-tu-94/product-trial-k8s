@@ -10,3 +10,5 @@ patches:
   - path: api-gateway-secret-patch.yml
   - path: ms-cms-config-patch.yml
   - path: ms-cms-secret-patch.yml
+  - path: ms-jobs-config-patch.yml
+  - path: ms-jobs-secret-patch.yml
